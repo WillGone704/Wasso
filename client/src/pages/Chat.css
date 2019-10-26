@@ -3,19 +3,41 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #1A1A1D;
+    background-color: rgb(223, 223, 230);
   }
   
   .container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     justify-content: space-between;
-    background: #FFFFFF;
     border-radius: 8px;
-    height: 60%;
-    width: 35%;
+    height: 100%;
+    width: 100%;
+
+    grid-template-columns: 10px 100px auto 100px 10px;
+    grid-template-rows: 1fr auto 1fr;
+    grid-template-areas: '. . BoxNotification . .'
+                '. usersPanel messages . .'
+                '. input input input .';
+    grid-gap: 10px 15px;
+    justify-content: stretch;
   }
-  
+
+  .boxNoti{grid-area: BoxNotification;}
+  .messages{grid-area: messages;}
+  .input{
+    grid-area: input;
+    justify-self: center;
+    align-self: flex-end;
+  }
+  .usersPanel{
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    grid-area: usersPanel;
+    justify-self: flex-end;
+    align-self: flex-start;
+  }
+
   @media (min-width: 320px) and (max-width: 480px) {
     .outerContainer {
       height: 100%;
@@ -29,7 +51,7 @@
   
   @media (min-width: 480px) and (max-width: 1200px) {
     .container {
-      width: 60%;
+      width: 100%;
     }
   }
   

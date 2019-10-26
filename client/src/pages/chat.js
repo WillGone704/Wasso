@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 
-import TextContainer from '../components/TextContainer/TextContainer';
 import Messages from '../components/Messages/Messages';
-import InfoBar from '../components/InfoBar/InfoBar';
+import InfoBar from '../components/InfoBar/boxNoti';
 import Input from '../components/Input/Input';
+import RoomsPanel from '../components/RoomsPanel/roomsPanel';
+import UsersPanel from '../components/UsersPanel/usersPanel';
+
 
 import './Chat.css';
 
@@ -13,14 +15,14 @@ let socket;
 export default ({ location }) => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
-  const [users, setUsers] = useState('');
+  const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const ENDPOINT = 'http://localhost:8080';
 
   useEffect(() => {
     //Catch the name and room that user put on Login form
-    const { name, room } = queryString.parse(location.state);
+    const { name, room } = location.state;
 
     //Connecting to the server
     socket = io(ENDPOINT);
@@ -33,10 +35,10 @@ export default ({ location }) => {
       if(error) {
         alert(error);
       }
+      socket.on('getUsers', ({users})=> setUsers([...users, name]))
     });
-  }, [ENDPOINT, location.search]);
+  }, [ENDPOINT, location.state]);
 
-  //Storing the incoming message and users on room
   useEffect(() => {
     socket.on('message', (message) => {
       setMessages([...messages, message ]);
@@ -64,11 +66,22 @@ export default ({ location }) => {
   return (
     <div className="outerContainer">
       <div className="container">
-          <InfoBar room={room} />
+        <section  className="boxNoti">
+          <InfoBar room={room}/>
+        </section>
+
+        <section className = "messages">
           <Messages messages={messages} name={name} />
+        </section>
+
+        <section className = "usersPanel">
+          <UsersPanel users = {users}/>
+        </section>
+
+        <section className = "input">
           <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+        </section>
       </div>
-      <TextContainer users={users}/>
     </div>
   );
 }

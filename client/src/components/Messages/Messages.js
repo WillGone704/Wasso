@@ -13,3 +13,4 @@ const Messages = ({ messages, name }) => (
 );
 
 export default Messages;
+//react-emoji and react-scroll-to-bottom
